@@ -34,6 +34,7 @@ RUN npm install --omit=dev
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/public ./public
 
 # Expose the port the app runs on
 EXPOSE 5000
