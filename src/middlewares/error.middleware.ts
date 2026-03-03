@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import path from 'path';
 import { Prisma } from '@prisma/client';
 import ApiError from '../utils/ApiError';
 import { sendResponse } from '../utils/response';
@@ -38,6 +39,17 @@ export const globalErrorHandler = (
   }
 
   // Add more specific error types (like Zod validation) as needed
+
+  // Professional HTML Error Response for Browsers
+  if (req.accepts('html')) {
+    const publicPath = path.join(__dirname, '../../public');
+    if (statusCode === 404) {
+      return res.status(404).sendFile(path.join(publicPath, '404.html'));
+    }
+    if (statusCode >= 500) {
+      return res.status(500).sendFile(path.join(publicPath, '500.html'));
+    }
+  }
 
   if (process.env.NODE_ENV === 'development') {
     return sendResponse(res, statusCode, message, { stack: err.stack }, errors);

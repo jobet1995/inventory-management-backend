@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from 'express';
+import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -29,6 +30,9 @@ app.use(morgan('dev'));
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK', message: 'API is running' });
 });
+
+// Serve public files (like css and js)
+app.use(express.static(path.join(__dirname, '../public')));
 
 // API Routes
 app.use('/', routes); 

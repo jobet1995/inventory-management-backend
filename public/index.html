@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management API | Professional Core Engine</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="A high-performance, strictly typed RESTful API powering modern supply chain management and automated inventory operations.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+    <!-- Professional Background Infrastructure -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="glow-container" aria-hidden="true">
+        <div class="glow-blob glow-1"></div>
+        <div class="glow-blob glow-2"></div>
+    </div>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <div class="page-wrapper">
+        <main class="content-container">
+            
+            <!-- Hero Section -->
+            <section class="hero-section animate-on-scroll">
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Core Infrastructure Active</span>
+                </div>
+
+                <h1 class="main-title">
+                    Inventory Management<br>
+                    <span class="gradient-text">Systems Architecture</span>
+                </h1>
+                
+                <p class="hero-description">
+                    The ultra-secure, strictly typed RESTful abstraction layer. 
+                    Engineered for high-throughput supply chain operations and real-time data orchestration.
+                </p>
+                
+                <div class="action-group">
+                    <a href="/health" class="btn btn-primary">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        System Health
+                    </a>
+                    <a href="https://github.com/jobet1995/inventory-management-backend" target="_blank" class="btn btn-secondary">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        Source Code
+                    </a>
+                </div>
+            </section>
+
+            <!-- 3D Feature Grid -->
+            <section class="features-grid">
+                <article class="glass-card animate-on-scroll">
+                    <div class="card-content">
+                        <div class="card-icon icon-cyan">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                        </div>
+                        <h3>Prisma Orchestration</h3>
+                        <p>High-concurrency data persistence powered by Prisma ORM and optimized PostgreSQL intervals.</p>
+                    </div>
+                </article>
+
+                <article class="glass-card animate-on-scroll">
+                    <div class="card-content">
+                        <div class="card-icon icon-blue">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3>Enterprise Access</h3>
+                        <p>Advanced JWT-based security with strict rate-limiting policies and Zod payload validation.</p>
+                    </div>
+                </article>
+
+                <article class="glass-card animate-on-scroll">
+                    <div class="card-content">
+                        <div class="card-icon icon-purple">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <h3>Automated CRON</h3>
+                        <p>Discrete back-end workers managing low-stock alerts and automated database integrity jobs.</p>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Interactive CLI Terminal Section -->
+            <section class="cli-section animate-on-scroll">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <div class="dot dot-r"></div>
+                        <div class="dot dot-y"></div>
+                        <div class="dot dot-g"></div>
+                    </div>
+                    <div class="terminal-title">bash — system_health.sh</div>
+                </div>
+                <div class="terminal-body" id="code-block">
+                    <button class="copy-btn" title="Copy to clipboard">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px; height:14px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copy
+                    </button>
+                    <div class="code-line">
+                        <span class="line-number">1</span>
+                        <span class="code-content"><span class="token-comment"># Query the core engine health endpoint</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">2</span>
+                        <span class="code-content"><span class="token-cmd">curl</span> -X GET <span class="token-str">"http://localhost:5000/health"</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">3</span>
+                        <span class="code-content"></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">4</span>
+                        <span class="code-content"><span class="token-comment"># Response 200 OK</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">5</span>
+                        <span class="code-content">{ <span class="token-str">"status"</span>: <span class="token-str">"UP"</span>, <span class="token-str">"version"</span>: <span class="token-str">"1.0.0"</span> }</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer Tech Metadata -->
+            <section class="tech-footprint animate-on-scroll">
+                <div class="footprint-path">
+                    <span class="path-symbol">➜</span>
+                    <span id="runtime-path">~/infrastructure/runtime</span>
+                </div>
+                <div class="tech-labels">
+                    <span class="label">TypeScript 5.x</span>
+                    <span class="label">Prisma ORM</span>
+                    <span class="label">Express.js</span>
+                    <span class="label">Node.js ES6+</span>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="main-footer">
+            <p class="footer-text">
+                &copy; <span id="year"></span> Systems Architecture Management. Engineered with Precision.
+            </p>
+        </footer>
+    </div>
+
+    <!-- Custom Interaction Script -->
+    <script src="/main.js"></script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import path from 'path';
 import authRoutes from './auth.routes';
 import userRoutes from './user.routes';
 import categoryRoutes from './category.routes';
@@ -24,14 +25,9 @@ console.log('🛣️ Initializing API routes...');
 // Mount Authentication routes
 router.use('/auth', authRoutes);
 
-// Root route for /api (this will now be / if index.ts is mounted at /)
+// Root route for API Landing Page
 router.get(['/', ''], (req, res) => {
-  console.log('API root hit');
-  res.status(200).json({
-    success: true,
-    message: 'Welcome to Inventory Management API',
-    timestamp: new Date().toISOString()
-  });
+  res.sendFile(path.join(__dirname, '../../public/index.html'));
 });
 
 // Mount routes
