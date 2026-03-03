@@ -32,7 +32,8 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // Serve public files (like css and js)
-app.use(express.static(path.join(__dirname, '../public')));
+const publicPath = path.resolve(process.cwd(), 'public');
+app.use(express.static(publicPath));
 
 // API Routes
 app.use('/', routes); 

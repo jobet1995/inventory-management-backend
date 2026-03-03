@@ -27,7 +27,7 @@ router.use('/auth', authRoutes);
 
 // Root route for API Landing Page
 router.get(['/', ''], (req, res) => {
-  res.sendFile(path.join(__dirname, '../../public/index.html'));
+  res.sendFile(path.join(process.cwd(), 'public/index.html'));
 });
 
 // Mount routes
