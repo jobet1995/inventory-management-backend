@@ -28,7 +28,7 @@ export const getPaymentById = async (id: string) => {
 };
 
 export const processPayment = async (data: Prisma.PaymentUncheckedCreateInput) => {
-  return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx: any) => {
     if (!data.invoiceId) {
       throw new ApiError(400, 'Invoice ID is required for payment');
     }
@@ -44,7 +44,7 @@ export const processPayment = async (data: Prisma.PaymentUncheckedCreateInput) =
     }
 
     // 2. Validate amount
-    const totalPaidSoFar = invoice.payments.reduce((sum, p) => sum + Number(p.amount), 0);
+    const totalPaidSoFar = invoice.payments.reduce((sum: number, p: any) => sum + Number(p.amount), 0);
     const amountToPay = Number(data.amount);
     const balance = Number(invoice.totalAmount) - totalPaidSoFar;
 
