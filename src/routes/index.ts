@@ -1,0 +1,45 @@
+import { Router } from 'express';
+import authRoutes from './auth.routes';
+import userRoutes from './user.routes';
+import categoryRoutes from './category.routes';
+import productRoutes from './product.routes';
+import supplierRoutes from './supplier.routes';
+import purchaseRoutes from './purchase.routes';
+import salesRoutes from './sales.routes';
+import stockRoutes from './stock.routes';
+import customerRoutes from './customer.routes';
+import invoiceRoutes from './invoice.routes';
+import paymentRoutes from './payment.routes';
+import warehouseRoutes from './warehouse.routes';
+
+const router = Router();
+
+console.log('🛣️ Initializing API routes...');
+
+// Mount Authentication routes at the root
+router.use('/', authRoutes);
+
+// Root route for /api (this will now be / if index.ts is mounted at /)
+router.get(['/', ''], (req, res) => {
+  console.log('API root hit');
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to Inventory Management API',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Mount routes
+router.use('/users', userRoutes);
+router.use('/categories', categoryRoutes);
+router.use('/products', productRoutes);
+router.use('/suppliers', supplierRoutes);
+router.use('/purchases', purchaseRoutes);
+router.use('/sales', salesRoutes);
+router.use('/stocks', stockRoutes);
+router.use('/customers', customerRoutes);
+router.use('/invoices', invoiceRoutes);
+router.use('/payments', paymentRoutes);
+router.use('/warehouses', warehouseRoutes);
+
+export default router;

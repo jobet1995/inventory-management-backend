@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -84,6 +85,7 @@ enum InvoiceStatus {
   DRAFT
   PENDING
   PAID
+  PARTIAL
   OVERDUE
   CANCELLED
 }
@@ -443,6 +445,9 @@ model Payment {
   salesOrder   SalesOrder? @relation("SalesOrderPayments", fields: [salesOrderId], references: [id])
   salesOrderId String?
 
+  invoice      Invoice? @relation(fields: [invoiceId], references: [id])
+  invoiceId    String?
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -463,6 +468,7 @@ model Invoice {
   pdfUrl        String?
 
   salesOrder SalesOrder @relation(fields: [salesOrderId], references: [id])
+  payments   Payment[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
