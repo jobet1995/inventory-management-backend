@@ -5,16 +5,28 @@ import * as bcrypt from '../utils/bcrypt';
 import { generateToken } from '../utils/jwt';
 
 export const registerUser = async (data: Prisma.UserCreateInput) => {
-  const existingUser = await prisma.user.findUnique({ where: { email: data.email } });
+  const { password, ...userData } = data;
+
+  // Check if email or username is already taken
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { email: data.email },
+        { ...(data.username ? { username: data.username } : {}) }
+      ]
+    }
+  });
+
   if (existingUser) {
-    throw new ApiError(400, 'Email already taken');
+    const isEmail = existingUser.email === data.email;
+    throw new ApiError(400, `${isEmail ? 'Email' : 'Username'} is already taken`);
   }
 
-  const hashedPassword = await bcrypt.hashPassword(data.password);
+  const hashedPassword = await bcrypt.hashPassword(password);
 
   const user = await prisma.user.create({
     data: {
-      ...data,
+      ...userData,
       password: hashedPassword,
     },
     select: {
@@ -22,6 +34,7 @@ export const registerUser = async (data: Prisma.UserCreateInput) => {
       firstName: true,
       lastName: true,
       email: true,
+      username: true,
       role: true,
       status: true,
       createdAt: true,
@@ -31,17 +44,29 @@ export const registerUser = async (data: Prisma.UserCreateInput) => {
   return user;
 };
 
-export const loginUser = async (email: string, password: string) => {
-  const user = await prisma.user.findUnique({ where: { email } });
+export const loginUser = async (loginId: string, password: string) => {
+  if (!loginId) {
+    throw new ApiError(400, 'Email or username is required');
+  }
+
+  // Find user by email OR username
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { email: loginId },
+        { username: loginId }
+      ]
+    }
+  });
   
   if (!user) {
-    throw new ApiError(401, 'Incorrect email or password');
+    throw new ApiError(401, 'Incorrect email/username or password');
   }
 
   // Compare hashed password
   const isMatch = await bcrypt.comparePassword(password, user.password);
   if (!isMatch) {
-    throw new ApiError(401, 'Incorrect email or password');
+    throw new ApiError(401, 'Incorrect email/username or password');
   }
 
   if (user.status !== 'ACTIVE') {

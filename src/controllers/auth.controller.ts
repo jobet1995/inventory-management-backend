@@ -10,8 +10,9 @@ export const register = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const login = catchAsync(async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  const data = await authService.loginUser(email, password);
+  const { email, username, password } = req.body;
+  const loginId = email || username;
+  const data = await authService.loginUser(loginId, password);
   sendResponse(res, 200, 'Login successful', data);
 });
 

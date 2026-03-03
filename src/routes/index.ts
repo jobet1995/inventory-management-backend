@@ -16,8 +16,8 @@ const router = Router();
 
 console.log('🛣️ Initializing API routes...');
 
-// Mount Authentication routes at the root
-router.use('/', authRoutes);
+// Mount Authentication routes
+router.use('/auth', authRoutes);
 
 // Root route for /api (this will now be / if index.ts is mounted at /)
 router.get(['/', ''], (req, res) => {

@@ -35,10 +35,32 @@ export const getPurchaseOrderById = async (id: string) => {
   return order;
 };
 
-export const createPurchaseOrder = async (data: Prisma.PurchaseOrderUncheckedCreateInput & { items: Prisma.PurchaseOrderItemUncheckedCreateWithoutPurchaseOrderInput[] }) => {
+export type CreatePurchaseOrderInput = Omit<Prisma.PurchaseOrderUncheckedCreateInput, 'totalPrice' | 'createdById'> & {
+  createdById: string;
+  items: (Omit<Prisma.PurchaseOrderItemUncheckedCreateWithoutPurchaseOrderInput, 'totalPrice' | 'purchaseOrderId'> & {
+    discount?: number;
+  })[];
+};
+
+export const createPurchaseOrder = async (data: CreatePurchaseOrderInput) => {
   return prisma.$transaction(async (tx) => {
-    // Calculate total price server-side as requested in comments
-    const calculatedTotal = data.items.reduce((sum, item) => sum + (Number(item.quantity) * Number(item.unitPrice)), 0);
+    // Calculate each item's price and the total price server-side
+    const processedItems = data.items.map(item => {
+      const quantity = Number(item.quantity);
+      const unitPrice = Number(item.unitPrice);
+      const discount = Number(item.discount || 0);
+      const totalPrice = quantity * (unitPrice - discount);
+      
+      return {
+        ...item,
+        quantity,
+        unitPrice,
+        discount,
+        totalPrice
+      };
+    });
+
+    const calculatedTotal = processedItems.reduce((sum, item) => sum + item.totalPrice, 0);
 
     // 1. Create the purchase order with items
     const order = await tx.purchaseOrder.create({
@@ -50,12 +72,7 @@ export const createPurchaseOrder = async (data: Prisma.PurchaseOrderUncheckedCre
         notes: data.notes,
         status: data.status || 'PENDING',
         items: {
-          create: data.items.map((item) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice,
-            totalPrice: Number(item.quantity) * Number(item.unitPrice)
-          }))
+          create: processedItems
         }
       },
       include: { items: true }

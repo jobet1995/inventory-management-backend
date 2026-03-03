@@ -7,6 +7,7 @@ import * as authValidator from '../validators/auth.validator';
 const router = Router();
 
 router.post('/register', validate(authValidator.registerSchema), authController.register);
+router.post('/signup', validate(authValidator.registerSchema), authController.register);
 router.get('/login', (req, res) => {
   res.status(200).json({ 
     success: true, 
