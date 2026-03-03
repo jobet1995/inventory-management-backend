@@ -1,0 +1,23 @@
+services:
+  app:
+    build: .
+    expose:
+      - "5000"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    restart: always
+
+# Note: This assumes you are connecting to your external NeonDB.
+# If you want to run a local Postgres, you would add a db service here.
