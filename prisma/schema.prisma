@@ -107,6 +107,18 @@ enum AuditLogEntity {
   STOCK
   PAYMENT
   INVOICE
+  BRAND
+  UNIT
+  TAX_RATE
+  SALES_RETURN
+  PURCHASE_RETURN
+}
+
+enum ReturnStatus {
+  PENDING
+  RECEIVED
+  COMPLETED
+  CANCELLED
 }
 
 enum ActivityType {
@@ -199,6 +211,15 @@ model Product {
   supplierId String
   supplier   Supplier @relation(fields: [supplierId], references: [id])
 
+  brandId String?
+  brand   Brand?  @relation(fields: [brandId], references: [id])
+
+  unitId String?
+  unit   Unit?   @relation(fields: [unitId], references: [id])
+
+  taxRateId String?
+  taxRate   TaxRate? @relation(fields: [taxRateId], references: [id])
+
   isActive Boolean @default(true)
 
   createdAt DateTime  @default(now())
@@ -206,10 +227,12 @@ model Product {
   deletedAt DateTime?
 
   // Relations
-  stocks             Stock[]
-  stockMovements     StockMovement[]
-  purchaseOrderItems PurchaseOrderItem[]
-  salesOrderItems    SalesOrderItem[]
+  stocks              Stock[]
+  stockMovements      StockMovement[]
+  purchaseOrderItems  PurchaseOrderItem[]
+  salesOrderItems     SalesOrderItem[]
+  purchaseReturnItems PurchaseReturnItem[]
+  salesReturnItems    SalesReturnItem[]
 
   @@index([sku])
   @@index([name])
@@ -361,6 +384,7 @@ model PurchaseOrder {
   // Relations
   items    PurchaseOrderItem[]
   payments Payment[]           @relation("PurchaseOrderPayments")
+  returns  PurchaseReturn[]
 
   @@index([supplierId])
   @@index([status])
@@ -405,6 +429,7 @@ model SalesOrder {
   items    SalesOrderItem[]
   payments Payment[]        @relation("SalesOrderPayments")
   invoices Invoice[]
+  returns  SalesReturn[]
 
   @@index([customerId])
   @@index([status])
@@ -446,8 +471,8 @@ model Payment {
   salesOrder   SalesOrder? @relation("SalesOrderPayments", fields: [salesOrderId], references: [id])
   salesOrderId String?
 
-  invoice      Invoice? @relation(fields: [invoiceId], references: [id])
-  invoiceId    String?
+  invoice   Invoice? @relation(fields: [invoiceId], references: [id])
+  invoiceId String?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -508,4 +533,93 @@ model ActivityLog {
 
   @@index([userId])
   @@index([activityType])
+}
+
+/// Represents a brand for products
+model Brand {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+}
+
+/// Represents a unit of measure
+model Unit {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  shortName String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+}
+
+/// Represents a tax rate
+model TaxRate {
+  id         String   @id @default(cuid())
+  name       String   @unique
+  percentage Decimal  @db.Decimal(5, 2)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  products Product[]
+}
+
+/// Represents a return of a sales order
+model SalesReturn {
+  id           String       @id @default(cuid())
+  salesOrderId String
+  reason       String?
+  status       ReturnStatus @default(PENDING)
+  totalAmount  Decimal      @db.Decimal(12, 2)
+  receivedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  salesOrder SalesOrder        @relation(fields: [salesOrderId], references: [id])
+  items      SalesReturnItem[]
+}
+
+/// Represents an item in a sales return
+model SalesReturnItem {
+  id            String  @id @default(cuid())
+  salesReturnId String
+  productId     String
+  quantity      Int
+  unitPrice     Decimal @db.Decimal(12, 2)
+  totalPrice    Decimal @db.Decimal(12, 2)
+
+  salesReturn SalesReturn @relation(fields: [salesReturnId], references: [id], onDelete: Cascade)
+  product     Product     @relation(fields: [productId], references: [id])
+}
+
+/// Represents a return of a purchase order
+model PurchaseReturn {
+  id              String       @id @default(cuid())
+  purchaseOrderId String
+  reason          String?
+  status          ReturnStatus @default(PENDING)
+  totalAmount     Decimal      @db.Decimal(12, 2)
+  returnedAt      DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  purchaseOrder PurchaseOrder        @relation(fields: [purchaseOrderId], references: [id])
+  items         PurchaseReturnItem[]
+}
+
+/// Represents an item in a purchase return
+model PurchaseReturnItem {
+  id               String  @id @default(cuid())
+  purchaseReturnId String
+  productId        String
+  quantity         Int
+  unitPrice        Decimal @db.Decimal(12, 2)
+  totalPrice       Decimal @db.Decimal(12, 2)
+
+  purchaseReturn PurchaseReturn @relation(fields: [purchaseReturnId], references: [id], onDelete: Cascade)
+  product        Product        @relation(fields: [productId], references: [id])
 }

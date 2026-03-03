@@ -11,6 +11,11 @@ import customerRoutes from './customer.routes';
 import invoiceRoutes from './invoice.routes';
 import paymentRoutes from './payment.routes';
 import warehouseRoutes from './warehouse.routes';
+import brandRoutes from './brand.routes';
+import unitRoutes from './unit.routes';
+import taxRateRoutes from './tax-rate.routes';
+import salesReturnRoutes from './sales-return.routes';
+import purchaseReturnRoutes from './purchase-return.routes';
 
 const router = Router();
 
@@ -41,5 +46,10 @@ router.use('/customers', customerRoutes);
 router.use('/invoices', invoiceRoutes);
 router.use('/payments', paymentRoutes);
 router.use('/warehouses', warehouseRoutes);
+router.use('/brands', brandRoutes);
+router.use('/units', unitRoutes);
+router.use('/tax-rates', taxRateRoutes);
+router.use('/sales-returns', salesReturnRoutes);
+router.use('/purchase-returns', purchaseReturnRoutes);
 
 export default router;
