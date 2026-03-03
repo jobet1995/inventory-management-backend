@@ -1,8 +1,8 @@
-import prisma from '../config/database';
-import ApiError from '../utils/ApiError';
-import { Prisma } from '@prisma/client';
-import * as bcrypt from '../utils/bcrypt';
-import { generateToken } from '../utils/jwt';
+import prisma from "../config/database";
+import ApiError from "../utils/ApiError";
+import { Prisma } from "@prisma/client";
+import * as bcrypt from "../utils/bcrypt";
+import { generateToken } from "../utils/jwt";
 
 export const registerUser = async (data: Prisma.UserCreateInput) => {
   const { password, ...userData } = data;
@@ -12,14 +12,17 @@ export const registerUser = async (data: Prisma.UserCreateInput) => {
     where: {
       OR: [
         { email: data.email },
-        { ...(data.username ? { username: data.username } : {}) }
-      ]
-    }
+        { ...(data.username ? { username: data.username } : {}) },
+      ],
+    },
   });
 
   if (existingUser) {
     const isEmail = existingUser.email === data.email;
-    throw new ApiError(400, `${isEmail ? 'Email' : 'Username'} is already taken`);
+    throw new ApiError(
+      400,
+      `${isEmail ? "Email" : "Username"} is already taken`,
+    );
   }
 
   const hashedPassword = await bcrypt.hashPassword(password);
@@ -38,7 +41,7 @@ export const registerUser = async (data: Prisma.UserCreateInput) => {
       role: true,
       status: true,
       createdAt: true,
-    }
+    },
   });
 
   return user;
@@ -46,43 +49,40 @@ export const registerUser = async (data: Prisma.UserCreateInput) => {
 
 export const loginUser = async (loginId: string, password: string) => {
   if (!loginId) {
-    throw new ApiError(400, 'Email or username is required');
+    throw new ApiError(400, "Email or username is required");
   }
 
   // Find user by email OR username
   const user = await prisma.user.findFirst({
     where: {
-      OR: [
-        { email: loginId },
-        { username: loginId }
-      ]
-    }
+      OR: [{ email: loginId }, { username: loginId }],
+    },
   });
-  
+
   if (!user) {
-    throw new ApiError(401, 'Incorrect email/username or password');
+    throw new ApiError(401, "Incorrect email/username or password");
   }
 
   // Compare hashed password
   const isMatch = await bcrypt.comparePassword(password, user.password);
   if (!isMatch) {
-    throw new ApiError(401, 'Incorrect email/username or password');
+    throw new ApiError(401, "Incorrect email/username or password");
   }
 
-  if (user.status !== 'ACTIVE') {
-    throw new ApiError(403, 'Account is not active');
+  if (user.status !== "ACTIVE") {
+    throw new ApiError(403, "Account is not active");
   }
 
-  // Update last login
-  await prisma.user.update({
+  // Update last login and get the updated user object
+  const updatedUser = await prisma.user.update({
     where: { id: user.id },
-    data: { lastLoginAt: new Date() }
+    data: { lastLoginAt: new Date() },
   });
 
   // Generate real JWT token
-  const token = generateToken({ id: user.id, role: user.role });
+  const token = generateToken({ id: updatedUser.id, role: updatedUser.role });
 
-  const { password: _, ...userWithoutPassword } = user;
+  const { password: _, ...userWithoutPassword } = updatedUser;
 
   return { user: userWithoutPassword, token };
 };
@@ -99,11 +99,11 @@ export const getUserById = async (id: string) => {
       role: true,
       status: true,
       lastLoginAt: true,
-    }
+    },
   });
 
   if (!user) {
-    throw new ApiError(404, 'User not found');
+    throw new ApiError(404, "User not found");
   }
 
   return user;
