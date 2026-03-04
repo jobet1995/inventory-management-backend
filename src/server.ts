@@ -1,8 +1,9 @@
 import app from './app';
 import prisma from './config/database';
+import { env } from './config/env';
 import { initScheduler } from './jobs/scheduler';
 
-const PORT = process.env.PORT || 5000;
+const PORT = env.PORT;
 
 const startServer = async () => {
   try {
@@ -15,7 +16,7 @@ const startServer = async () => {
 
     const server = app.listen(PORT, () => {
       console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`🔗 Primary endpoint: http://localhost:${PORT}`);
+      console.log(`🔗 Primary endpoint: http://localhost:${PORT}/api`);
     });
 
     // Initialize background cron jobs

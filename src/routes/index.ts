@@ -17,6 +17,8 @@ import unitRoutes from './unit.routes';
 import taxRateRoutes from './tax-rate.routes';
 import salesReturnRoutes from './sales-return.routes';
 import purchaseReturnRoutes from './purchase-return.routes';
+import healthRoutes from './health.routes';
+import adminRoutes from './admin.routes';
 
 const router = Router();
 
@@ -47,5 +49,7 @@ router.use('/units', unitRoutes);
 router.use('/tax-rates', taxRateRoutes);
 router.use('/sales-returns', salesReturnRoutes);
 router.use('/purchase-returns', purchaseReturnRoutes);
+router.use('/health', healthRoutes);
+router.use('/admin', adminRoutes);
 
 export default router;

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Authentication | Core Engine</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 440px;
+            padding: 3rem 2.5rem;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--clr-text-muted);
+            text-transform: capitalize;
+        }
+
+        .form-input {
+            background: rgba(2, 6, 23, 0.5);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius-md);
+            padding: 0.875rem 1rem;
+            color: var(--clr-text);
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--clr-primary);
+        }
+
+        #login-error {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+        }
+    </style>
+</head>
+<body>
+    <!-- Professional Background Infrastructure -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="glow-container" aria-hidden="true">
+        <div class="glow-blob glow-1" style="width: 50vw; height: 50vw; left: 10%; top: 10%;"></div>
+        <div class="glow-blob glow-2" style="width: 40vw; height: 40vw; right: 5%; bottom: 10%; background: var(--clr-accent);"></div>
+    </div>
+    <div class="bg-grid" aria-hidden="true" style="opacity: 0.5;"></div>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <div class="login-container">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <svg class="icon icon-cyan" style="width: 3rem; height: 3rem; margin-bottom: 1rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <h2 class="main-title" style="font-size: 2rem; margin-bottom: 0.5rem;">System <span class="gradient-text">Auth</span></h2>
+            <p class="hero-description" style="font-size: 0.95rem; margin: 0;">Secure Engine Access Required.</p>
+        </div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label class="form-label" for="email">Admin Email</label>
+                <input type="email" id="email" class="form-input" placeholder="admin@coreengine.com" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+            
+            <div id="login-error"></div>
+
+            <div class="form-group" style="margin-top: 2.5rem; margin-bottom: 0;">
+                <button type="submit" class="btn btn-primary" style="width: 100%; display: flex; justify-content: center; gap: 0.5rem; padding: 1rem;" id="login-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                    Authenticate
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/main.js"></script>
+    <script src="/login.js"></script>
+</body>
+</html>
